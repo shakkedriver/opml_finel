@@ -20,11 +20,11 @@ def quad_func(x):
 def experiment_2(f, d=5, kernel="laplacian", alpha=0):
     mse_list = []
     n_range = np.arange(1e1, 1e4, 500).astype(int)
-    test_x = uniform_unit_sphere_data(d, 500)
+    test_x = uniform_unit_sphere_data(d, 1000)
     test_y = f(test_x)
     for n in tqdm.tqdm(n_range):
         temp_mse = []
-        for i in range(1):
+        for i in range(20):
             x = uniform_unit_sphere_data(d, n)
             y = f(x)+ np.random.normal(0, 1, n)
             krr = KernelRidge(alpha=alpha, kernel=kernel)
@@ -42,7 +42,7 @@ def experiment_1(d=5, kernel="laplacia", alpha=0):
     test_x = uniform_unit_sphere_data(d, 1000)
     for n in tqdm.tqdm(n_range):
         temp_mse = []
-        for i in range(1):
+        for i in range(20):
             x = uniform_unit_sphere_data(d, n)
             y = np.random.normal(0, 1, n)
             krr = KernelRidge(alpha=alpha, kernel=kernel)
