@@ -52,7 +52,7 @@ def experiment_1(d=5, kernel="laplacia", alpha=0):
             temp_mse.append(loss)
         mse_list.append(np.median(temp_mse))
     return mse_list, n_range
-
+#hasdhsah
 
 def plot_experiment_kernel_ridge(mse_list, n_range, title):
     plt.plot(n_range, mse_list)
