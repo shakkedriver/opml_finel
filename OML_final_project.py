@@ -165,18 +165,10 @@ def polynomial_kernel(X, Y, gamma=1.0, c=0.0, degree=3):
 
 
 def cosine_kernel(X, Y):
-    # Normalize the vectors to have unit norm
-    K = np.dot(X, Y.T) / (np.linalg.norm(X) * np.linalg.norm(Y))
+    X_normalized = X / np.linalg.norm(X, axis=1, keepdims=True)
+    Y_normalized = Y / np.linalg.norm(Y, axis=1, keepdims=True)
+    K = np.dot(X_normalized, Y_normalized.T)
     return K
-
-
-# TODO remove this after validating
-# def cosine_kernel(X, Y):
-#     # Normalize the vectors to have unit norm
-#     X_normalized = X / np.linalg.norm(X, axis=1, keepdims=True)
-#     Y_normalized = Y / np.linalg.norm(Y, axis=1, keepdims=True)
-#     K = np.dot(X_normalized, Y_normalized.T)
-#     return K
 
 
 # Fit the model on the kernel ridge regression
