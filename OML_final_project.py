@@ -206,11 +206,6 @@ def new_kernels_experiments():
 # Experiment 2: Try non linear target function
 
 # Create non-linear target function
-def funfunc(x):
-    vec = np.ones((1,x.shape[1]))
-    a=gaussian_kernel(x,vec)
-    return a
-
 def quad_func(x):
     x = x ** 2
     vec = np.arange(x.shape[1]) + 1
@@ -253,7 +248,7 @@ def test_mse_with_different_kernels_non_zero_func(f, d=5, kernel="laplacian", al
 def conduct_kernel_experiments_non_linear():
     # Ridged Gaussian Kernel
     test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian = test_mse_with_different_kernels_non_zero_func(
-        funfunc,
+        quad_func,
         kernel="gaussian",
         alpha=0.1)
     # Ridgeless Laplacian Kernel
@@ -271,8 +266,30 @@ def conduct_kernel_experiments_non_linear():
                                  "Gaussian Kernel with Non Linear Function")
 
 
+# # *****************************
+# # Experiment 3: Try different target function
+
+# # Create new target function
+def linear_kernel_func(x):
+    vec = np.ones((1, x.shape[1]))
+    a = gaussian_kernel(x, vec)
+    return a
+
+
+# Calculate and plot test MSE for ridged Gaussian kernel using kernel related target function
+def conduct_kernel_experiments_kernel_func():
+    # Ridged Gaussian Kernel
+    test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian = test_mse_with_different_kernels_non_zero_func(
+        linear_kernel_func,
+        kernel="gaussian",
+        alpha=0.1)
+    # Plot results
+    plot_experiment_kernel_ridge(test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian,
+                                 "Ridged Gaussian Kernel with Kernel Related Function")
+
+
 # *****************************
-# Experiment 3: Different ridge regularization values for zero function
+# Experiment 4: Different ridge regularization values for zero function
 
 # Try various ridge regression values for learning zero function
 def ridge_regression_experiment():
@@ -285,7 +302,6 @@ def ridge_regression_experiment():
             alpha=alpha)
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
     # Plot results
-    plt.clf()
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel)")
     plt.ylabel("Test MSE")
     plt.xlabel("Train Samples")
@@ -294,10 +310,11 @@ def ridge_regression_experiment():
     plt.tight_layout()
     plt.savefig("ridge_regression_experiment.png")
     plt.show()
+    plt.clf()
 
 
 # *****************************
-# Experiment 4: Different ridge regularization values for non linear function
+# Experiment 5: Different ridge regularization values for non linear function
 
 # Try various ridge regression values for learning non linear function
 def ridge_regression_experiment_non_linear():
@@ -311,7 +328,6 @@ def ridge_regression_experiment_non_linear():
             alpha=alpha)
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
     # Plot results
-    plt.clf()
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Non Linear Function")
     plt.ylabel("Test MSE")
     plt.xlabel("Train Samples")
@@ -320,44 +336,11 @@ def ridge_regression_experiment_non_linear():
     plt.tight_layout()
     plt.savefig("ridge_regression_experiment_non_linear.png")
     plt.show()
-
-
-# *****************************
-# Experiment 5: Different ridge regularization values for linear function
-
-# Create linear target function
-def lin_func(x):
-    # vec = np.arange(x.shape[1]) + 1
-    vec = np.ones(x.shape[1])
-    vec = vec.reshape((-1, 1))
-    return x @ vec
-
-
-# Try various ridge regression values for learning non linear function
-def ridge_regression_experiment_linear():
-    # alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
-    alphas = [0.1]
-    plt.figure(figsize=(10, 6))
-    for alpha in alphas:
-        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(
-            lin_func,
-            kernel="gaussian",
-            alpha=alpha)
-        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
-    # Plot results
     plt.clf()
-    plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Linear Function")
-    plt.ylabel("Test MSE")
-    plt.xlabel("Train Samples")
-    plt.yscale("log")
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig("ridge_regression_experiment_linear_with_linear_ones.png")
-    plt.show()
 
 
 # *****************************
-# # Experiment 6: showing kernel eiganvalues assymptotic decay
+# Experiment 6: Showing kernel eigenvalues asymptotic decay
 
 # Gaussian kernel eiganvalues decay
 def plot_gaussian_kernel_mat_eiganvalues_decay(d=5):
@@ -424,25 +407,22 @@ def plot_laplacian_kernel_mat_eiganvalues_decay(d=5):
 
 
 if __name__ == '__main__':
-    # x = uniform_unit_sphere_data(5,20)
-    # a = funfunc(x)
-    # print(a)
     # # Reproduce results from the paper
     # reproduce_experiments()
     # # Experiment 1: Try new kernels
     # new_kernels_experiments()
     # # Experiment 2: Try non linear target function
-    conduct_kernel_experiments_non_linear()
-    # Experiment 3: Different ridge regularization values for zero function
+    # conduct_kernel_experiments_non_linear()
+
+    # Experiment 3: Try different target function
+    conduct_kernel_experiments_kernel_func()
+
+    # # Experiment 4: Different ridge regularization values for zero function
     # ridge_regression_experiment()
-    # Experiment 4: Different ridge regularization values for non linear function
+    # # Experiment 5: Different ridge regularization values for non linear function
     # ridge_regression_experiment_non_linear()
 
-    # # Experiment 5: Different ridge regularization values for linear function
-    # TODO fix that
-    # ridge_regression_experiment_linear()
-
-    # # Experiment 6: showing kernel eiganvalues assymptotic decay
+    # # Experiment 6: Showing kernel eigenvalues asymptotic decay
     # plot_gaussian_kernel_mat_eiganvalues_decay()
     # plot_laplacian_kernel_mat_eiganvalues_decay()
 
