@@ -102,16 +102,21 @@ def fit_kernel(x, X_train, Y_train, kernel, alpha, gamma=1.0):
 # Alpha is the regularization factor, alpha = 0 means no ridge regularization
 def reproduce_experiments():
     # Ridged Gaussian Kernel
-    test_mse_ridge_gaussian, n_range_ridge_gaussian, upper_ridge_gaussian, lower_ridge_gaussian = test_mse_with_different_kernels(kernel="gaussian",
-                                                                                             alpha=0.1)
+    test_mse_ridge_gaussian, n_range_ridge_gaussian, upper_ridge_gaussian, lower_ridge_gaussian = test_mse_with_different_kernels(
+        kernel="gaussian",
+        alpha=0.1)
     # Ridgeless Laplacian Kernel
-    test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian = test_mse_with_different_kernels(kernel="laplacian")
+    test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian = test_mse_with_different_kernels(
+        kernel="laplacian")
     # Ridgeless Gaussian Kernel
-    test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian = test_mse_with_different_kernels(kernel="gaussian")
+    test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian = test_mse_with_different_kernels(
+        kernel="gaussian")
     # Plot results
-    plot_experiment_kernel_ridge(test_mse_ridge_gaussian, n_range_ridge_gaussian, upper_ridge_gaussian, lower_ridge_gaussian,
+    plot_experiment_kernel_ridge(test_mse_ridge_gaussian, n_range_ridge_gaussian, upper_ridge_gaussian,
+                                 lower_ridge_gaussian,
                                  "Ridged Gaussian Kernel")
-    plot_experiment_kernel_ridge(test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian, "Laplacian Kernel")
+    plot_experiment_kernel_ridge(test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian,
+                                 "Laplacian Kernel")
     plot_experiment_kernel_ridge(test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian, "Gaussian Kernel")
 
 
@@ -201,6 +206,11 @@ def new_kernels_experiments():
 # Experiment 2: Try non linear target function
 
 # Create non-linear target function
+def funfunc(x):
+    vec = np.ones((1,x.shape[1]))
+    a=gaussian_kernel(x,vec)
+    return a
+
 def quad_func(x):
     x = x ** 2
     vec = np.arange(x.shape[1]) + 1
@@ -242,18 +252,23 @@ def test_mse_with_different_kernels_non_zero_func(f, d=5, kernel="laplacian", al
 # Calculate and plot test MSE for few kernels using non linear target function
 def conduct_kernel_experiments_non_linear():
     # Ridged Gaussian Kernel
-    test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian = test_mse_with_different_kernels_non_zero_func(quad_func,
-                                                                                              kernel="gaussian",
-                                                                                              alpha=0.1)
+    test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian = test_mse_with_different_kernels_non_zero_func(
+        funfunc,
+        kernel="gaussian",
+        alpha=0.1)
     # Ridgeless Laplacian Kernel
-    test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian = test_mse_with_different_kernels_non_zero_func(quad_func, kernel="laplacian")
+    test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian = test_mse_with_different_kernels_non_zero_func(
+        quad_func, kernel="laplacian")
     # Ridgeless Gaussian Kernel
-    test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian = test_mse_with_different_kernels_non_zero_func(quad_func, kernel="gaussian")
+    test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian = test_mse_with_different_kernels_non_zero_func(
+        quad_func, kernel="gaussian")
     # Plot results
     plot_experiment_kernel_ridge(test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian,
                                  "Ridged Gaussian Kernel with Non Linear Function")
-    plot_experiment_kernel_ridge(test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian, "Laplacian Kernel with Non Linear Function")
-    plot_experiment_kernel_ridge(test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian, "Gaussian Kernel with Non Linear Function")
+    plot_experiment_kernel_ridge(test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian,
+                                 "Laplacian Kernel with Non Linear Function")
+    plot_experiment_kernel_ridge(test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian,
+                                 "Gaussian Kernel with Non Linear Function")
 
 
 # *****************************
@@ -265,8 +280,9 @@ def ridge_regression_experiment():
     alphas = [0.01, 0.1, 0.3, 0.5]
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
-        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels(kernel="gaussian",
-                                                                                          alpha=alpha)
+        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels(
+            kernel="gaussian",
+            alpha=alpha)
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
     # Plot results
     plt.clf()
@@ -289,10 +305,11 @@ def ridge_regression_experiment_non_linear():
     alphas = [0.01, 0.1, 0.3, 0.5]
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
-        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(quad_func,
-                                                                                                        kernel="gaussian",
-                                                                                                        alpha=alpha)
-        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian,upper, lower, label=f'alpha={alpha}')
+        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(
+            quad_func,
+            kernel="gaussian",
+            alpha=alpha)
+        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
     # Plot results
     plt.clf()
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Non Linear Function")
@@ -322,9 +339,10 @@ def ridge_regression_experiment_linear():
     alphas = [0.1]
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
-        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(lin_func,
-                                                                                                        kernel="gaussian",
-                                                                                                        alpha=alpha)
+        test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(
+            lin_func,
+            kernel="gaussian",
+            alpha=alpha)
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
     # Plot results
     plt.clf()
@@ -406,16 +424,19 @@ def plot_laplacian_kernel_mat_eiganvalues_decay(d=5):
 
 
 if __name__ == '__main__':
+    # x = uniform_unit_sphere_data(5,20)
+    # a = funfunc(x)
+    # print(a)
     # # Reproduce results from the paper
     # reproduce_experiments()
     # # Experiment 1: Try new kernels
     # new_kernels_experiments()
     # # Experiment 2: Try non linear target function
-    # conduct_kernel_experiments_non_linear()
+    conduct_kernel_experiments_non_linear()
     # Experiment 3: Different ridge regularization values for zero function
-    ridge_regression_experiment()
+    # ridge_regression_experiment()
     # Experiment 4: Different ridge regularization values for non linear function
-    ridge_regression_experiment_non_linear()
+    # ridge_regression_experiment_non_linear()
 
     # # Experiment 5: Different ridge regularization values for linear function
     # TODO fix that
