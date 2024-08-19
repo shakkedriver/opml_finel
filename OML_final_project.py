@@ -158,7 +158,8 @@ def conduct_kernel_experiments_non_linear():
 
 # Try various ridge regression values for learning zero function
 def ridge_regression_experiment():
-    alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
+    # alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
+    alphas = [0.01, 0.1, 0.3, 0.5]
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
         test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels(kernel="gaussian",
@@ -166,6 +167,7 @@ def ridge_regression_experiment():
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
 
     # Plot results
+    plt.clf()
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel)")
     plt.ylabel("Test MSE")
     plt.xlabel("Train Samples")
@@ -178,7 +180,8 @@ def ridge_regression_experiment():
 
 # Try various ridge regression values for learning non linear function
 def ridge_regression_experiment_non_linear():
-    alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
+    # alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
+    alphas = [0.01, 0.1, 0.3, 0.5]
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
         test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(quad_func,
@@ -187,6 +190,7 @@ def ridge_regression_experiment_non_linear():
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian,upper, lower, label=f'alpha={alpha}')
 
     # Plot results
+    plt.clf()
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Non Linear Function")
     plt.ylabel("Test MSE")
     plt.xlabel("Train Samples")
@@ -483,6 +487,7 @@ def ridge_regression_experiment_linear():
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
 
     # Plot results
+    plt.clf()
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Linear Function")
     plt.ylabel("Test MSE")
     plt.xlabel("Train Samples")
@@ -566,6 +571,7 @@ def plot_gaussian_kernel_mat_eiganvalues_decay(d=5):
     normalized_theoretical_eigenvalues = theoretical_eigenvalues[:len(sorted_eigenvalues)] * norm_factor
 
     # Plot eigenvalue decay
+    plt.clf()
     plt.figure(figsize=(12, 8))
     plt.plot(sorted_eigenvalues, marker='o', linestyle='-', color='b', label='Kernel Matrix Eigenvalues')
     plt.plot(indices[:len(sorted_eigenvalues)], normalized_theoretical_eigenvalues, marker='x', linestyle='--',
@@ -598,6 +604,7 @@ def plot_laplacian_kernel_mat_eiganvalues_decay(d=5):
     normalized_theoretical_eigenvalues = theoretical_eigenvalues[:len(sorted_eigenvalues)] * norm_factor
 
     # Plot eigenvalue decay
+    plt.clf()
     plt.figure(figsize=(12, 8))
     plt.plot(sorted_eigenvalues, marker='o', linestyle='-', color='b', label='Kernel Matrix Eigenvalues')
     plt.plot(indices[:len(sorted_eigenvalues)], normalized_theoretical_eigenvalues, marker='x', linestyle='--',
@@ -643,6 +650,7 @@ def plot_new_kernel_mat_eigenvalues_decay(d=5):
         plt.plot(sorted_eigenvalues, marker='o', linestyle='-', label=f'{kernel_name} Kernel Eigenvalues')
 
     # Plot the theoretical decay (i^{-log(i)})
+    plt.clf()
     plt.plot(indices[:len(sorted_eigenvalues)], normalized_theoretical_eigenvalues, marker='x', linestyle='--',
              color='r', label='$\lambda_i = i^{-\log(i)}$')
 
@@ -657,17 +665,16 @@ def plot_new_kernel_mat_eigenvalues_decay(d=5):
 
 
 if __name__ == '__main__':
-    # First, we reproduce results from the paper
-    reproduce_experiments()
+    # # First, we reproduce results from the paper
+    # reproduce_experiments()
     # # Experiment 1: Try new kernels
     # new_kernels_experiments()
     # # Experiment 2: Try non linear target function
     # conduct_kernel_experiments_non_linear()
-    # # Experiment 3: Different ridge regularization values for zero function
-    # ridge_regression_experiment()
-    # # Experiment 4: Different ridge regularization values for non linear function
-    # ridge_regression_experiment_non_linear()
-
+    # Experiment 3: Different ridge regularization values for zero function
+    ridge_regression_experiment()
+    # Experiment 4: Different ridge regularization values for non linear function
+    ridge_regression_experiment_non_linear()
 
     # # Experiment 5: Different ridge regularization values for linear function
     # ridge_regression_experiment_linear()
