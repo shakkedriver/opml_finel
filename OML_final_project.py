@@ -152,24 +152,31 @@ def test_mse_with_new_kernels(d=5, kernel="laplacian", alpha=0.0):
 
 
 # implementation of the new kernels
-def sigmoid_kernel(X, Y, alpha=1.0, c=0.0):
-    dot_product = np.dot(X, Y.T)
-    K = np.tanh(alpha * dot_product + c)
+def sigmoid_kernel(X, Y, gamma=1.0, c=0.0):
+    dot_prod = np.dot(X, Y.T)
+    K = np.tanh(gamma * dot_prod + c)
     return K
 
 
-def polynomial_kernel(X, Y, alpha=1.0, c=0.0, degree=3):
-    dot_product = np.dot(X, Y.T)
-    K = (alpha * dot_product + c) ** degree
+def polynomial_kernel(X, Y, gamma=1.0, c=0.0, degree=3):
+    dot_prod = np.dot(X, Y.T)
+    K = (gamma * dot_prod + c) ** degree
     return K
 
 
 def cosine_kernel(X, Y):
     # Normalize the vectors to have unit norm
-    X_normalized = X / np.linalg.norm(X, axis=1, keepdims=True)
-    Y_normalized = Y / np.linalg.norm(Y, axis=1, keepdims=True)
-    K = np.dot(X_normalized, Y_normalized.T)
+    K = np.dot(X, Y.T) / (np.linalg.norm(X) * np.linalg.norm(Y))
     return K
+
+
+# TODO remove this after validating
+# def cosine_kernel(X, Y):
+#     # Normalize the vectors to have unit norm
+#     X_normalized = X / np.linalg.norm(X, axis=1, keepdims=True)
+#     Y_normalized = Y / np.linalg.norm(Y, axis=1, keepdims=True)
+#     K = np.dot(X_normalized, Y_normalized.T)
+#     return K
 
 
 # Fit the model on the kernel ridge regression
@@ -427,3 +434,4 @@ if __name__ == '__main__':
     # plot_laplacian_kernel_mat_eiganvalues_decay()
 
     # TODO i deleted gamma=gmma in fit_kernel so just start the run and see this still works
+    # todo rerun cosine similarity
