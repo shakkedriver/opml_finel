@@ -1,4 +1,4 @@
-Final project is the course Foundations of Overparameterized Machine Learning, spring 2024
+Final project of the course Foundations of Overparameterized Machine Learning, spring 2024
 
 Lecturer: Prof. Yehuda Dar
 
