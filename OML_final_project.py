@@ -292,14 +292,14 @@ def conduct_kernel_experiments_kernel_func():
 
 # Try various ridge regression values for learning zero function
 def ridge_regression_experiment():
-    # alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
     alphas = [0.01, 0.1, 0.3, 0.5]
+    plt.clf()
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
         test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels(
             kernel="gaussian",
             alpha=alpha)
-        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
+        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, label=f'alpha={alpha}')
     # Plot results
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel)")
     plt.ylabel("Test MSE")
@@ -309,7 +309,6 @@ def ridge_regression_experiment():
     plt.tight_layout()
     plt.savefig("ridge_regression_experiment.png")
     plt.show()
-    plt.clf()
 
 
 # *****************************
@@ -317,15 +316,15 @@ def ridge_regression_experiment():
 
 # Try various ridge regression values for learning non linear function
 def ridge_regression_experiment_non_linear():
-    # alphas = [0.001, 0.01, 0.1, 0.3, 0.5, 0.7]
     alphas = [0.01, 0.1, 0.3, 0.5]
+    plt.clf()
     plt.figure(figsize=(10, 6))
     for alpha in alphas:
         test_mse_ridge_gaussian, n_range_ridge_gaussian, upper, lower = test_mse_with_different_kernels_non_zero_func(
             quad_func,
             kernel="gaussian",
             alpha=alpha)
-        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, upper, lower, label=f'alpha={alpha}')
+        plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, label=f'alpha={alpha}')
     # Plot results
     plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Non Linear Function")
     plt.ylabel("Test MSE")
@@ -335,7 +334,6 @@ def ridge_regression_experiment_non_linear():
     plt.tight_layout()
     plt.savefig("ridge_regression_experiment_non_linear.png")
     plt.show()
-    plt.clf()
 
 
 # *****************************
@@ -413,13 +411,13 @@ if __name__ == '__main__':
     # # Experiment 2: Try non linear target function
     # conduct_kernel_experiments_non_linear()
 
-    # Experiment 3: Try different target function
-    conduct_kernel_experiments_kernel_func()
+    # # Experiment 3: Try different target function
+    # conduct_kernel_experiments_kernel_func()
 
-    # # Experiment 4: Different ridge regularization values for zero function
-    # ridge_regression_experiment()
-    # # Experiment 5: Different ridge regularization values for non linear function
-    # ridge_regression_experiment_non_linear()
+    # Experiment 4: Different ridge regularization values for zero function
+    ridge_regression_experiment()
+    # Experiment 5: Different ridge regularization values for non linear function
+    ridge_regression_experiment_non_linear()
 
     # # Experiment 6: Showing kernel eigenvalues asymptotic decay
     # plot_gaussian_kernel_mat_eiganvalues_decay()
