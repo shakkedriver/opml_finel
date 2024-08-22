@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.kernel_ridge import KernelRidge
 from scipy.spatial.distance import cdist
 import tqdm
 
+# Python script to perform experiments conducted in the report
 
 # First, we reconstruct the experiment from the paper
+
 
 # Create synthetic data
 # Returns n samples of dimension d on unit sphere
@@ -33,7 +34,7 @@ def test_mse_with_different_kernels(d=5, kernel="laplacian", alpha=0.0):
             # Train data and labels
             train_data = uniform_unit_sphere_data(d, n)
             train_labels = np.random.normal(0, 1, n)
-            # # Train kernel regression
+            # Train kernel regression
             y_pred = fit_kernel(test_data, train_data, train_labels, kernel, alpha, gamma=0.5)
             # This function learns the constant 0 function (same as in paper)
             loss = np.mean(y_pred ** 2)  # true labels are zero
@@ -53,11 +54,12 @@ def plot_experiment_kernel_ridge(mse_list, n_range, upper, lower, title):
     lower = np.array(lower)
     upper = np.array(upper)
     plt.fill_between(n_range, mse_list - lower, mse_list + upper, alpha=0.2, label='25%-75% range')
-    plt.title(title)
-    plt.ylabel("Test MSE")
-    plt.xlabel("Train Samples")
+    plt.title(title, fontsize=20)
+    plt.ylabel("Test MSE", fontsize=16)
+    plt.xlabel("Train Samples", fontsize=16)
     plt.yscale("log")
-    # plt.show()
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.tight_layout()
     plt.savefig(f"{title}.png")
 
@@ -71,7 +73,7 @@ def gaussian_kernel(X, Y, gamma=1.0):
 
 # Calculate Laplacian kernel
 def laplacian_kernel(X, Y, gamma=1.0):
-    # Compute the L1 (Manhattan) distance between each pair of points
+    # Compute the l1 distance between each pair of points
     dists = cdist(X, Y, metric='cityblock')
     K = np.exp(-gamma * dists)
     return K
@@ -258,11 +260,11 @@ def conduct_kernel_experiments_non_linear():
         quad_func, kernel="gaussian")
     # Plot results
     plot_experiment_kernel_ridge(test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian,
-                                 "Ridged Gaussian Kernel with Non Linear Function")
+                                 "Non Linear Function")
     plot_experiment_kernel_ridge(test_mse_laplacian, n_range_laplacian, upper_laplacian, lower_laplacian,
-                                 "Laplacian Kernel with Non Linear Function")
+                                 "Laplacian Kernel")
     plot_experiment_kernel_ridge(test_mse_gaussian, n_range_gaussian, upper_gaussian, lower_gaussian,
-                                 "Gaussian Kernel with Non Linear Function")
+                                 "Gaussian Kernel")
 
 
 # # *****************************
@@ -271,8 +273,8 @@ def conduct_kernel_experiments_non_linear():
 # # Create new target function
 def linear_kernel_func(x):
     vec = np.ones((1, x.shape[1]))
-    a = gaussian_kernel(x, vec)
-    return a
+    res = gaussian_kernel(x, vec)
+    return res
 
 
 # Calculate and plot test MSE for ridged Gaussian kernel using kernel related target function
@@ -284,7 +286,7 @@ def conduct_kernel_experiments_kernel_func():
         alpha=0.1)
     # Plot results
     plot_experiment_kernel_ridge(test_mse_ridge_gaussian, n_range_gaussian, upper_ridge_gaussian, lower_ridge_gaussian,
-                                 "Ridged Gaussian Kernel with Kernel Related Function")
+                                 "Kernel Related Function")
 
 
 # *****************************
@@ -301,14 +303,15 @@ def ridge_regression_experiment():
             alpha=alpha)
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, label=f'alpha={alpha}')
     # Plot results
-    plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel)")
-    plt.ylabel("Test MSE")
-    plt.xlabel("Train Samples")
+    plt.title("Ridged Gaussian Kernel for Various Ridge Values", fontsize=18)
+    plt.ylabel("Test MSE", fontsize=16)
+    plt.xlabel("Train Samples", fontsize=16)
     plt.yscale("log")
     plt.legend()
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.tight_layout()
     plt.savefig("ridge_regression_experiment.png")
-    plt.show()
 
 
 # *****************************
@@ -326,14 +329,15 @@ def ridge_regression_experiment_non_linear():
             alpha=alpha)
         plt.plot(n_range_ridge_gaussian, test_mse_ridge_gaussian, label=f'alpha={alpha}')
     # Plot results
-    plt.title("Test MSE vs Train Samples for Different Alphas (Gaussian Kernel) for Non Linear Function")
-    plt.ylabel("Test MSE")
-    plt.xlabel("Train Samples")
+    plt.title("Ridged Gaussian Kernel for Various Ridge Values - Non Linear Function", fontsize=18)
+    plt.ylabel("Test MSE", fontsize=16)
+    plt.xlabel("Train Samples", fontsize=16)
     plt.yscale("log")
     plt.legend()
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.tight_layout()
     plt.savefig("ridge_regression_experiment_non_linear.png")
-    plt.show()
 
 
 # *****************************
@@ -362,13 +366,14 @@ def plot_gaussian_kernel_mat_eiganvalues_decay(d=5):
     plt.plot(indices[:len(sorted_eigenvalues)], normalized_theoretical_eigenvalues, marker='x', linestyle='--',
              color='r', label='Normalized Theoretical Decay ($i^{-log(i)}$)')
     plt.yscale('log')
-    plt.title(f'Eigenvalue Decay of Gaussian Kernel Matrix (d={d}, n={n})')
-    plt.xlabel('Index')
-    plt.ylabel('Eigenvalue (log scale)')
+    plt.title(f'Eigenvalue Decay of Gaussian Kernel Matrix', fontsize=24)
+    plt.xlabel('Index', fontsize=20)
+    plt.ylabel('Eigenvalue (log scale)', fontsize=20)
     plt.grid(True)
-    plt.legend()
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.legend(fontsize=18)
     plt.savefig("gaussian_eiganvals_decay.png")
-    # plt.show()
 
 
 # Laplacian kernel eiganvalues decay
@@ -394,34 +399,29 @@ def plot_laplacian_kernel_mat_eiganvalues_decay(d=5):
     plt.plot(indices[:len(sorted_eigenvalues)], normalized_theoretical_eigenvalues, marker='x', linestyle='--',
              color='r', label='Normalized Theoretical Decay ($i^{-i}$)')
     plt.yscale('log')
-    plt.title(f'Eigenvalue Decay of Laplacian Kernel Matrix (d={d}, n={n})')
-    plt.xlabel('Index')
-    plt.ylabel('Eigenvalue (log scale)')
+    plt.title(f'Eigenvalue Decay of Laplacian Kernel Matrix', fontsize=24)
+    plt.xlabel('Index', fontsize=20)
+    plt.ylabel('Eigenvalue (log scale)', fontsize=20)
     plt.grid(True)
-    plt.legend()
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.legend(fontsize=18)
     plt.savefig("laplacian_eiganvals_decay.png")
-    # plt.show()
 
 
 if __name__ == '__main__':
-    # # Reproduce results from the paper
-    # reproduce_experiments()
-    # # Experiment 1: Try new kernels
-    # new_kernels_experiments()
-    # # Experiment 2: Try non linear target function
-    # conduct_kernel_experiments_non_linear()
-
-    # # Experiment 3: Try different target function
-    # conduct_kernel_experiments_kernel_func()
-
+    # Reproduce results from the paper
+    reproduce_experiments()
+    # Experiment 1: Try new kernels
+    new_kernels_experiments()
+    # Experiment 2: Try non linear target function
+    conduct_kernel_experiments_non_linear()
+    # Experiment 3: Try different target function
+    conduct_kernel_experiments_kernel_func()
     # Experiment 4: Different ridge regularization values for zero function
     ridge_regression_experiment()
     # Experiment 5: Different ridge regularization values for non linear function
     ridge_regression_experiment_non_linear()
-
-    # # Experiment 6: Showing kernel eigenvalues asymptotic decay
-    # plot_gaussian_kernel_mat_eiganvalues_decay()
-    # plot_laplacian_kernel_mat_eiganvalues_decay()
-
-    # TODO i deleted gamma=gmma in fit_kernel so just start the run and see this still works
-    # todo rerun cosine similarity
+    # Experiment 6: Showing kernel eigenvalues asymptotic decay
+    plot_gaussian_kernel_mat_eiganvalues_decay()
+    plot_laplacian_kernel_mat_eiganvalues_decay()
